@@ -7,7 +7,6 @@ import os
 import re
 import downloader
 
-CRAWL_LIMIT = 200
 YOUTUBE_URL_REG_EXP = "((?<=(v|V)/)|(?<=be/)|(?<=(\?|\&)v=)|(?<=embed/))([\w-]+)"
 OUTPUT_DIR = "labeled_data"
 
@@ -39,19 +38,16 @@ class MainScreen(BoxLayout):
 
     def get_next_comment(self):
         try:
-            if (self.comment_count >= CRAWL_LIMIT):
-                raise StopIteration
-            self.comment_count += 1
-            self.text_comment.text = next(self.comment_generator)['text']
-            self.text_progress.text = "{}/{}".format(self.comment_count, CRAWL_LIMIT)
+            self.current_comment = next(self.comment_generator)
+            self.text_comment.text = self.current_comment['text']
         except StopIteration:
-            self.text_comment.text = "DONE!"
+            self.text_comment.text = "No more comments! Switch to another video"
             self.set_buttons_disabled(True)
 
     def label(self, label):
-        fname = os.path.join(OUTPUT_DIR, label, "{}_{}.txt".format(self.video_id, self.comment_count))
+        fname = os.path.join(OUTPUT_DIR, label, "{}.txt".format(self.current_comment["cid"]))
         with open(fname, "w+") as f:
-            f.write(self.text_comment.text)
+            f.write(self.current_comment['text'])
         self.get_next_comment()
 
 
