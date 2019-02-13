@@ -1,11 +1,11 @@
 # text-labeling
 ## Dependencies
 ```bash
-pip install cython kivy
+pip install requests lxml cssselect cython pygame kivy
 ```
 ## Usage
 ```bash
 python main.py
 ```
-## Issues:
+## Issues
 * Can't render emojis
