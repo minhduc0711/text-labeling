@@ -6,7 +6,8 @@ MainScreen:
     button_negative: button_negative
     button_skip: button_skip
     text_comment: comment
-    
+    skip_interval: skip_interval
+
     orientation: 'vertical'
 
     BoxLayout:
@@ -56,12 +57,25 @@ MainScreen:
         size_hint_y: None
 
         Widget:
+            size_hint_x: 1
+        Widget:
+            size_hint_x: 1
         Button:
             id: button_skip
             text: "Skip"
             disabled: True
             on_press: root.get_next_comment()
-        Widget:
+            size_hint_x: 2
+        
+        Label:
+            text: "Skip interval:"
+            size_hint_x: 1
+        TextInput:
+            id: skip_interval
+            input_filter: "int"
+            text: "1"
+            size_hint_x: 1
+        
 
 
 <ErrorPopup>:

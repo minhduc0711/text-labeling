@@ -18,6 +18,7 @@ class MainScreen(BoxLayout):
     button_skip = ObjectProperty()
     text_comment = ObjectProperty()
     text_progress = ObjectProperty()
+    skip_interval = ObjectProperty()
 
     def set_buttons_disabled(self, disabled):
         self.button_positive.disabled = disabled
@@ -38,7 +39,8 @@ class MainScreen(BoxLayout):
 
     def get_next_comment(self):
         try:
-            self.current_comment = next(self.comment_generator)
+            for _ in range(int(self.skip_interval.text)):
+                self.current_comment = next(self.comment_generator)
             self.text_comment.text = self.current_comment['text']
         except StopIteration:
             self.text_comment.text = "No more comments! Switch to another video"
@@ -46,7 +48,7 @@ class MainScreen(BoxLayout):
 
     def label(self, label):
         fname = os.path.join(OUTPUT_DIR, label, "{}.txt".format(self.current_comment["cid"]))
-        with open(fname, "w+") as f:
+        with open(fname, "w+", encoding="utf8") as f:
             f.write(self.current_comment['text'])
         self.get_next_comment()
 
