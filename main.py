@@ -1,7 +1,7 @@
 from kivy.app import App
 from kivy.uix.popup import Popup
 from kivy.uix.boxlayout import BoxLayout
-from kivy.properties import ObjectProperty
+from kivy.properties import ObjectProperty, StringProperty
 
 import os
 import re
@@ -19,6 +19,7 @@ class MainScreen(BoxLayout):
     text_comment = ObjectProperty()
     text_progress = ObjectProperty()
     skip_interval = ObjectProperty()
+    text_comment_count = ObjectProperty()
 
     def set_buttons_disabled(self, disabled):
         self.button_positive.disabled = disabled
@@ -39,8 +40,10 @@ class MainScreen(BoxLayout):
 
     def get_next_comment(self):
         try:
-            for _ in range(int(self.skip_interval.text)):
+            num_skip = int(self.skip_interval.text)
+            for _ in range(num_skip):
                 self.current_comment = next(self.comment_generator)
+            self.update_comment_count(num_skip)
             self.text_comment.text = self.current_comment['text']
         except StopIteration:
             self.text_comment.text = "No more comments! Switch to another video"
@@ -51,6 +54,10 @@ class MainScreen(BoxLayout):
         with open(fname, "w+", encoding="utf8") as f:
             f.write(self.current_comment['text'])
         self.get_next_comment()
+
+    def update_comment_count(self, num_skip):
+        self.comment_count += num_skip
+        self.text_comment_count.text = "Comment count: " + str(self.comment_count)
 
 
 class ErrorPopup(Popup):

@@ -7,6 +7,7 @@ MainScreen:
     button_skip: button_skip
     text_comment: comment
     skip_interval: skip_interval
+    text_comment_count: text_comment_count
 
     orientation: 'vertical'
 
@@ -56,10 +57,9 @@ MainScreen:
         height: "40dp"
         size_hint_y: None
 
-        Widget:
-            size_hint_x: 1
-        Widget:
-            size_hint_x: 1
+        Label:
+            size_hint_x: 2
+            id: text_comment_count
         Button:
             id: button_skip
             text: "Skip"
